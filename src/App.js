@@ -52,26 +52,23 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() =>{
-    auth.onAuthStateChanged((authUser) =>{
+    const unsubscribe = auth.onAuthStateChanged((authUser) =>{
       if (authUser){
         //user has logged in
         console.log(authUser);
         setUser(authUser);
-
-        if (authUser.displaName){
-          //dont update username
-        }else{
-          //if we just created someone
-          return authUser.updateProfile({
-            displayName: username,
-          })
-        }
       }
       else{
         //user has logged out
         setUser(null);
       }
+
     })
+
+    return () => {
+      //perform some cleanup action
+      unsubscribe();
+    }
   }, [user, username]);
 
   useEffect(() =>{
@@ -89,6 +86,11 @@ function App() {
     event.preventDefault();
     auth
     .createUserWithEmailAndPassword(email, password)
+    .then((authUser) =>{
+      return authUser.user.updateProfile({
+        displayName: username
+      })
+    })
     .catch((error) => alert(error.message))
     
   }
@@ -135,7 +137,14 @@ function App() {
         <img className="app_headerImage" src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
         alt=""/>
       </div>
-      <Button onClick={() => setOpen(true)}>Sign up</Button>
+
+      {/*if the user exists*/}
+      {user ? (
+        <Button onClick={() => auth.signOut()}>Log out</Button>
+      ): (
+        <Button onClick={() => setOpen(true)}>Sign up</Button>
+      )}
+      
 
       <h1>hello</h1>
 
