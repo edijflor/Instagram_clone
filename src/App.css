@@ -7,6 +7,12 @@
   height: 100vh;
 }
 
+.app_posts {
+  padding: 20px;
+  padding-left: 30%;
+  
+}
+
 .app_header{
   background-color: white;
   padding: 20px;
