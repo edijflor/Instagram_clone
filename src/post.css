@@ -33,6 +33,10 @@
     margin-top: 10px;
 }
 
+.post_comments {
+    padding: 20px;
+}
+
 .post_input{
     flex: 1;
     border: none;
